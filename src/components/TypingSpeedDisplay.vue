@@ -31,12 +31,12 @@ export default defineComponent({
       if (typedWords === 0) {
         return 0;
       } else {
-        return ((typedWords - 1) / minutesPassed) % 1;
+        return ((typedWords - 1) / minutesPassed).toFixed();
       }
     });
     const cpm = computed(() => {
       const minutesPassed = (90 - Number(remainingTypingTime.value)) / 60;
-      return props.correctlyTypedCharacters / minutesPassed;
+      return (props.correctlyTypedCharacters / minutesPassed).toFixed();
     });
     function countDownTimer() {
       if (Number(remainingTypingTime.value) > 0) {

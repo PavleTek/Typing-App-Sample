@@ -1,11 +1,5 @@
-export type Frase = {
-  frase: string;
-  wpm: number;
-  cpm: number;
-};
-
 export type State = {
-  frases: { [frasesId: string]: Frase };
+  frases: { [frasesId: string]: string };
   activeFrase: string;
   activeFraseId: string;
   activeFraseArray: string[];
