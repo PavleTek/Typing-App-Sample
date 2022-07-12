@@ -6,6 +6,8 @@ export type Getters = {
   getActiveFrase(state: State): string;
   getActiveFraseArray(state: State): string[];
   getCountDown(state: State): number;
+  getTypingCountDown(state: State): number;
+  getWpm(state: State): boolean;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -20,5 +22,11 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   getCountDown(state) {
     return state.startCountDown;
+  },
+  getTypingCountDown(state) {
+    return state.typingCountDown;
+  },
+  getWpm(state) {
+    return state.wpm;
   },
 };

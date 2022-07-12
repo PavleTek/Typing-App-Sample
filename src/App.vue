@@ -1,20 +1,21 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted} from "vue"
-import TaskList from "./components/TaskList.vue"
-import { useStore } from "./store"
-import TypingTextSquareVue from "./components/TypingTextSquare.vue"
-import { ActionTypes } from "./store/actions"
+import { computed, defineComponent, onMounted } from "vue";
+import TaskList from "./components/TaskList.vue";
+import { useStore } from "./store";
+import TypingTextSquareVue from "./components/TypingTextSquare.vue";
+import { ActionTypes } from "./store/actions";
+import OptionsButtonsVue from "./components/OptionsButtons.vue";
 
 export default defineComponent({
-  components: { TypingTextSquareVue },
+  components: { TypingTextSquareVue, OptionsButtonsVue },
   setup() {
-    const store = useStore()
+    const store = useStore();
     onMounted(() => {
       store.dispatch(ActionTypes.SetInitialFrases);
-    })
-    return { }
+    });
+    return {};
   },
-})
+});
 </script>
 
 <template>
@@ -24,7 +25,8 @@ export default defineComponent({
     >
       Typing App Sample
     </h1>
-      <TypingTextSquareVue />
+    <TypingTextSquareVue />
+    <OptionsButtonsVue />
   </div>
 </template>
 <style>

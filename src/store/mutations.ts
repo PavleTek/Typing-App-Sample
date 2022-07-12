@@ -8,7 +8,8 @@ export enum MutationType {
   SetRandomActiveFrase = "SET_RANDOM_ACTIVE_FRASE",
   SetFraseSubSections = "SET_FRASE_SUBSETCTIONS",
   SetCountDown = "SET_COUNT_DOWN",
-  ToogleTypingOn = "START_TYPING",
+  SetTypingCountDown = "SET_TYPING_COUNT_DOWN",
+  ToggleSpeedMeasure = "TOGGLE_SPEED_MEASURE",
 }
 
 export type Mutations = {
@@ -16,7 +17,8 @@ export type Mutations = {
   [MutationType.SetRandomActiveFrase](state: State): void;
   [MutationType.SetFraseSubSections](state: State): void;
   [MutationType.SetCountDown](state: State, number: number): void;
-  [MutationType.ToogleTypingOn](state: State): void;
+  [MutationType.SetTypingCountDown](state: State, number: number): void;
+  [MutationType.ToggleSpeedMeasure](state: State): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -46,7 +48,10 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationType.SetCountDown](state, number) {
     state.startCountDown = number;
   },
-  [MutationType.ToogleTypingOn](state) {
-    state.typingOn = !state.typingOn;
+  [MutationType.SetTypingCountDown](state, number) {
+    state.typingCountDown = number;
+  },
+  [MutationType.ToggleSpeedMeasure](state) {
+    state.wpm = !state.wpm;
   },
 };

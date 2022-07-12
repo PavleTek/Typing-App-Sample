@@ -4,7 +4,8 @@ export type State = {
   activeFraseId: string;
   activeFraseArray: string[];
   startCountDown: number;
-  typingOn: boolean;
+  typingCountDown: number;
+  wpm: boolean;
 };
 
 export const state: State = {
@@ -13,5 +14,6 @@ export const state: State = {
   activeFraseId: "",
   activeFraseArray: [],
   startCountDown: -1,
-  typingOn: false,
+  typingCountDown: 0,
+  wpm: true,
 };

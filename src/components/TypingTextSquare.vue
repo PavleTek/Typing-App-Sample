@@ -3,10 +3,11 @@ import { computed, defineComponent, watch } from "vue";
 import { store, useStore } from "../store";
 import { ActionTypes } from "../store/actions";
 import { MutationType } from "../store/mutations";
-import StartCounterVue from "./StartCounter.vue";
+import TrafficLight from "./TrafficLight.vue";
+import TypingSpeedDisplayVue from "./TypingSpeedDisplay.vue";
 
 export default defineComponent({
-  components: { StartCounterVue },
+  components: { TrafficLight, TypingSpeedDisplayVue },
   setup() {
     // imports store
     const store = useStore();
@@ -22,15 +23,28 @@ export default defineComponent({
       window.setTimeout(() => document.getElementById("input")?.focus(), 0);
     }
     function StartCountdDown() {
-      store.commit(MutationType.SetCountDown, 3);
+      store.commit(MutationType.SetCountDown, 6);
       document.getElementById("start-button")?.blur();
+    }
+    function setInitialCoolDown() {
+      store.commit(MutationType.SetCountDown, -1);
+    }
+    function setInitialTypingCountDown() {
+      store.commit(MutationType.SetTypingCountDown, 0);
     }
     watch(startCountDown, (currentvalue, oldvalue) => {
       if (currentvalue === 0) {
         focusInput();
       }
     });
-    return { changeFrase, StartCountdDown, activeFraseArray, startCountDown };
+    return {
+      changeFrase,
+      StartCountdDown,
+      setInitialCoolDown,
+      setInitialTypingCountDown,
+      activeFraseArray,
+      startCountDown,
+    };
   },
 
   data() {
@@ -38,10 +52,16 @@ export default defineComponent({
     const inputMessage = "";
     const backgroundInputMessage = "";
     const alreadyCorrectlyTypedWord = "";
+    const correctlyTypedCharacters = 0;
+    const correctlyTypedWords = computed(() => {
+      return alreadyCorrectlyTypedWord.split(" ").length;
+    });
     return {
       inputMessage,
       backgroundInputMessage,
       alreadyCorrectlyTypedWord,
+      correctlyTypedCharacters,
+      correctlyTypedWords,
     };
   },
 
@@ -56,6 +76,8 @@ export default defineComponent({
     changeFraseButton: function() {
       this.resetInputMessage();
       this.changeFrase();
+      this.setInitialCoolDown();
+      this.setInitialTypingCountDown();
     },
     // used instead of v-model in order to be able to only display the last word on input
     setInputMessage: function(event: any) {
@@ -72,6 +94,7 @@ export default defineComponent({
           this.backgroundInputMessage.length === this.activeFraseArray.length
         ) {
           this.changeFraseButton();
+          this.setInitialCoolDown();
         }
       }
     },
@@ -79,9 +102,11 @@ export default defineComponent({
     checkIfCorrectValueSoFar: function() {
       for (let i = 0; i < this.backgroundInputMessage.length; i++) {
         if (this.backgroundInputMessage[i] !== this.activeFraseArray[i]) {
+          this.correctlyTypedCharacters = i;
           return false;
         }
       }
+      this.correctlyTypedCharacters = this.backgroundInputMessage.length;
       return true;
     },
     // makes the html cleaner, creates the string class name for the main frase element
@@ -117,11 +142,21 @@ export default defineComponent({
           >{{ character }}
         </span>
       </div>
-      <button @click="StartCountdDown" class="start-button" id="start-button">
+      <button
+        @click="StartCountdDown"
+        class="start-button"
+        id="start-button"
+        v-show="startCountDown === -1"
+      >
         Start
       </button>
+      <TrafficLight v-if="startCountDown > 0" />
+      <TypingSpeedDisplayVue
+        v-if="startCountDown === 0"
+        :correctly-typed-characters="correctlyTypedCharacters"
+        :correctly-typed-words="alreadyCorrectlyTypedWord"
+      />
     </div>
-    <StartCounterVue v-if="startCountDown > 0" />
     <input
       v-if="startCountDown === 0"
       type="text"
