@@ -1,17 +1,15 @@
 export type State = {
   frases: { [frasesId: string]: string };
   activeFrase: string;
-  alreadyTyped: string;
-  currentlyBeingTypedWord: string;
-  notTypedYet: string;
-  fraseArrayAttempt: string[];
+  activeFraseId: string;
+  activeFraseArray: string[];
+  countDownOn: boolean;
 };
 
 export const state: State = {
   frases: {},
-  activeFrase: '',
-  alreadyTyped: '',
-  currentlyBeingTypedWord: '',
-  notTypedYet: '',
-  fraseArrayAttempt: [],
+  activeFrase: "",
+  activeFraseId: "",
+  activeFraseArray: [],
+  countDownOn: false,
 };

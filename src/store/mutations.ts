@@ -25,15 +25,18 @@ export const mutations: MutationTree<State> & Mutations = {
     state.frases = stateFrasesCopy;
   },
   [MutationType.SetRandomActiveFrase](state) {
-    const frases = Object.values(state.frases);
+    const frases = Object.keys(state.frases);
     let activeFrase = state.activeFrase;
+    let activeFraseId = "";
     while (activeFrase === state.activeFrase) {
-      activeFrase = frases[Math.floor(Math.random() * frases.length)];
+      activeFraseId = frases[Math.floor(Math.random() * frases.length)];
+      activeFrase = state.frases[activeFraseId];
     }
+    state.activeFraseId = activeFraseId;
     state.activeFrase = activeFrase;
   },
   [MutationType.SetFraseSubSections](state) {
     const activeFraseArray = state.activeFrase.split("");
-    state.fraseArrayAttempt = activeFraseArray;
+    state.activeFraseArray = activeFraseArray;
   },
 };

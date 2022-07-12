@@ -2,53 +2,68 @@
 import { computed, defineComponent } from "vue";
 import { store, useStore } from "../store";
 import { ActionTypes } from "../store/actions";
+import StartCounterVue from "./StartCounter.vue";
 import { MutationType } from "@/store/mutations";
 
 export default defineComponent({
   components: {},
   setup() {
+    // imports store
     const store = useStore();
+    // computed values from getters that call the store
     const activeFraseArray = computed(() => store.getters.getActiveFraseArray);
+    const startCountDownOn = computed(() => store.getters.getCountDownOn);
+
+    // changes the active frase in the store
     function changeFrase() {
       store.dispatch(ActionTypes.ChangeActiveFrase, undefined);
     }
-    function correctlyTypedCharacter(character: string, index: number) {
-      const functionActiveFraseArray = store.getters.getActiveFrase;
-      return functionActiveFraseArray[index] === character;
-    }
-    return { changeFrase, activeFraseArray, correctlyTypedCharacter };
+    return { changeFrase, activeFraseArray, startCountDownOn };
   },
 
   data() {
-    const theFrase = computed(() => store.getters.getActiveFrase);
+    //  input variables need for all the class and styling logic, color change on errros, only showing the last word on input, etc...
     const inputMessage = "";
     const backgroundInputMessage = "";
     const alreadyCorrectlyTypedWord = "";
     return {
-      theFrase,
       inputMessage,
       backgroundInputMessage,
       alreadyCorrectlyTypedWord,
     };
   },
+
   methods: {
+    // sets everything related to the input to base state
     resetInputMessage: function() {
       this.inputMessage = "";
+      this.backgroundInputMessage = "";
+      this.alreadyCorrectlyTypedWord = "";
     },
+    // changes the frase, and sets input values to base state
     changeFraseButton: function() {
       this.resetInputMessage();
       this.changeFrase();
     },
+    // used instead of v-model in order to be able to only display the last word on input
     setInputMessage: function(event: any) {
       const inputValue = event.target.value;
       this.inputMessage = inputValue;
       this.backgroundInputMessage = this.alreadyCorrectlyTypedWord + inputValue;
       const lastChar = inputValue[inputValue.length - 1];
-      if (lastChar === " " && this.checkIfCorrectValueSoFar()) {
-        this.alreadyCorrectlyTypedWord = this.backgroundInputMessage;
-        this.inputMessage = "";
+      if (this.checkIfCorrectValueSoFar()) {
+        if (lastChar === " ") {
+          this.alreadyCorrectlyTypedWord = this.backgroundInputMessage;
+          this.inputMessage = "";
+        }
+        if (
+          this.backgroundInputMessage.length === this.activeFraseArray.length
+        ) {
+          this.changeFraseButton();
+        }
       }
     },
+    // checker to see if the frase has been correctly type from the begginin to the last typed value
     checkIfCorrectValueSoFar: function() {
       for (let i = 0; i < this.backgroundInputMessage.length; i++) {
         if (this.backgroundInputMessage[i] !== this.activeFraseArray[i]) {
@@ -57,6 +72,7 @@ export default defineComponent({
       }
       return true;
     },
+    // makes the html cleaner, creates the string class name for the main frase element
     createClassForSpan: function(character: string, index: number): string {
       let classString = "";
       if (character === this.backgroundInputMessage[index]) {
@@ -67,8 +83,10 @@ export default defineComponent({
       ) {
         classString += "incorrect-input-letter ";
       }
-      if (this.backgroundInputMessage.length === index) {
+      if (this.backgroundInputMessage.length === index && index !== 0) {
         classString += "current-letter-being-typed";
+      } else if (this.backgroundInputMessage.length === 0 && index === 0) {
+        classString += "first-letter-being-typed";
       }
       return classString;
     },
@@ -83,12 +101,13 @@ export default defineComponent({
         v-for="(character, index) in activeFraseArray"
         :key="index"
         :class="createClassForSpan(character, index)"
-        >{{ character }}</span
-      >
+        >{{ character }}
+      </span>
     </div>
     <input
       type="text"
       class="typing-input"
+      :class="{ 'wrong-input-entered': !checkIfCorrectValueSoFar() }"
       :value="inputMessage"
       @input="setInputMessage($event)"
     />
@@ -122,6 +141,9 @@ export default defineComponent({
   border-radius: 3px;
   background-color: rgb(78, 76, 74);
 }
+.wrong-input-entered {
+  background-color: rgb(218, 116, 116) !important;
+}
 .change-button {
   margin: 2%;
   align-content: flex-start;
@@ -135,7 +157,27 @@ export default defineComponent({
   color: rgb(0, 0, 0);
   background-color: rgb(216, 63, 63);
 }
+@-webkit-keyframes fade {
+  from {
+    border-left: solid 1px blue;
+  }
+  to {
+    border-left: solid 1px rgba(0, 0, 255, 0);
+  }
+}
+
+@keyframes fade {
+  from {
+    border-left: solid 1px rgba(0, 0, 255, 0);
+  }
+  to {
+    border-left: solid 1px blue;
+  }
+}
 .current-letter-being-typed {
   border-left: solid 1px blue;
+}
+.first-letter-being-typed {
+  animation: fade 0.5s infinite 100ms;
 }
 </style>
