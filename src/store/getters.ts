@@ -1,8 +1,9 @@
 import { GetterTree } from "vuex";
-import { State } from "./state";
+import { Frase, State } from "./state";
 
 export type Getters = {
   getFraseById(state: State): (id: string) => string;
+  getFraseDataById(state: State): (id: string) => Frase;
   getActiveFrase(state: State): string;
   getActiveFraseArray(state: State): string[];
   getCountDown(state: State): number;
@@ -12,6 +13,9 @@ export type Getters = {
 
 export const getters: GetterTree<State, State> & Getters = {
   getFraseById: (state) => (id: string) => {
+    return state.frases[id].frase;
+  },
+  getFraseDataById: (state) => (id: string) => {
     return state.frases[id];
   },
   getActiveFrase(state) {

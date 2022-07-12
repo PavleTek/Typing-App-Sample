@@ -10,6 +10,8 @@ export enum MutationType {
   SetCountDown = "SET_COUNT_DOWN",
   SetTypingCountDown = "SET_TYPING_COUNT_DOWN",
   ToggleSpeedMeasure = "TOGGLE_SPEED_MEASURE",
+  SetCurrentWPM = "SET_CURRENT_WPM",
+  SetCurrentCPM = "SET_CURRENT_CPM",
 }
 
 export type Mutations = {
@@ -19,6 +21,8 @@ export type Mutations = {
   [MutationType.SetCountDown](state: State, number: number): void;
   [MutationType.SetTypingCountDown](state: State, number: number): void;
   [MutationType.ToggleSpeedMeasure](state: State): void;
+  [MutationType.SetCurrentWPM](state: State, number: number): void;
+  [MutationType.SetCurrentCPM](state: State, number: number): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -26,7 +30,9 @@ export const mutations: MutationTree<State> & Mutations = {
     const stateFrasesCopy = state.frases;
     frases.forEach((frase: string) => {
       const newFraseId = uuid();
-      stateFrasesCopy[newFraseId] = frase;
+      stateFrasesCopy[newFraseId].frase = frase;
+      stateFrasesCopy[newFraseId].cpm = 0;
+      stateFrasesCopy[newFraseId].wpm = 0;
     });
     state.frases = stateFrasesCopy;
   },
@@ -36,7 +42,7 @@ export const mutations: MutationTree<State> & Mutations = {
     let activeFraseId = "";
     while (activeFrase === state.activeFrase) {
       activeFraseId = frases[Math.floor(Math.random() * frases.length)];
-      activeFrase = state.frases[activeFraseId];
+      activeFrase = state.frases[activeFraseId].frase;
     }
     state.activeFraseId = activeFraseId;
     state.activeFrase = activeFrase;
@@ -53,5 +59,11 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.ToggleSpeedMeasure](state) {
     state.wpm = !state.wpm;
+  },
+  [MutationType.SetCurrentWPM](state, number) {
+    state.currentWPM = number;
+  },
+  [MutationType.SetCurrentCPM](state, number) {
+    state.currentCPM = number;
   },
 };
