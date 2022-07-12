@@ -1,29 +1,17 @@
-export type TaskItem = {
-  id: number;
-  title: string;
-  description: string;
-  createdBy: string;
-  assignedTo: string;
-  completed: boolean;
-  editing: boolean;
-};
-
 export type State = {
-  loading: boolean;
-  tasks: TaskItem[];
-  showCreateModal: boolean;
-  showEditModal: boolean;
-  showTaskModal: boolean;
-  editModalTaskId: number | undefined;
-  showTaskId: number | undefined;
+  frases: { [frasesId: string]: string };
+  activeFrase: string;
+  alreadyTyped: string;
+  currentlyBeingTypedWord: string;
+  notTypedYet: string;
+  fraseArrayAttempt: string[];
 };
 
 export const state: State = {
-  loading: false,
-  tasks: [],
-  showCreateModal: false,
-  showEditModal: false,
-  showTaskModal: false,
-  editModalTaskId: undefined,
-  showTaskId: undefined,
+  frases: {},
+  activeFrase: '',
+  alreadyTyped: '',
+  currentlyBeingTypedWord: '',
+  notTypedYet: '',
+  fraseArrayAttempt: [],
 };

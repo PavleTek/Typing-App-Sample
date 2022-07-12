@@ -1,20 +1,20 @@
 import { GetterTree } from "vuex";
-import { State, TaskItem } from "./state";
+import { State } from "./state";
 
 export type Getters = {
-  completedTaskCount(state: State): number;
-  totalTaskCount(state: State): number;
-  getTaskById(state: State): (id: number) => TaskItem | undefined;
+  getFraseById(state: State): (id: string) => string;
+  getActiveFrase(state: State): string;
+  getActiveFraseArray(state: State): string[];
 };
 
-export const getters: GetterTree<State, State> & Getters = {
-  completedTaskCount(state) {
-    return state.tasks.filter((element) => element.completed).length;
+export const getters: GetterTree<State, State> & Getters = { 
+  getFraseById: (state) => (id: string) => {
+    return state.frases[id];
   },
-  totalTaskCount(state) {
-    return state.tasks.length;
+  getActiveFrase(state) {
+    return state.activeFrase;
   },
-  getTaskById: (state) => (id: number) => {
-    return state.tasks.find((task) => task.id === id);
-  },
+  getActiveFraseArray(state) {
+    return state.fraseArrayAttempt;
+  }
 };
