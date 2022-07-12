@@ -27,40 +27,54 @@ export default defineComponent({
 
 <template>
   <div class="counter-container">
-    <h2>{{ countDown }}</h2>
     <div class="traffic-light">
-      <div class="red-light"></div>
-      <div class="yellow-light"></div>
-      <div class="green-light"></div>
+      <div :class="[countDown === 3 ? 'red-light' : 'grey-light']"></div>
+      <div :class="[countDown === 2 ? 'yellow-light' : 'grey-light']"></div>
+      <div :class="[countDown === 1 ? 'green-light' : 'grey-light']"></div>
     </div>
   </div>
 </template>
 <style scoped>
 .counter-container {
-  background-color: aqua;
+  background-color: rgb(24, 24, 24);
   padding: 2%;
   margin: 2%;
+  width: min-content;
+  height: min-content;
+  border-radius: 20px;
 }
 .traffic-light {
   display: flex;
   justify-content: space-evenly;
+  width: 10em;
+  height: 4em;
 }
 .green-light {
   background-color: green;
-  border-radius: 10%;
-  height: 4em !important;
-  width: 4em !important;
+  border: black solid 2px;
+  border-radius: 50%;
+  height: 3em !important;
+  width: 3em !important;
 }
 .yellow-light {
   background-color: yellow;
-  border-radius: 10%;
-  height: 4em;
-  width: 4em;
+  border: black solid 2px;
+  border-radius: 50%;
+  height: 3em;
+  width: 3em;
 }
 .red-light {
   background-color: red;
-  border-radius: 10%;
-  height: 4em;
-  width: 4em;
+  border: black solid 2px;
+  border-radius: 50%;
+  height: 3em;
+  width: 3em;
+}
+.grey-light {
+  background-color: rgb(117, 112, 112);
+  border: black solid 2px;
+  border-radius: 50%;
+  height: 3em;
+  width: 3em;
 }
 </style>

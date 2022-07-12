@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, watch } from "vue";
 import { store, useStore } from "../store";
 import { ActionTypes } from "../store/actions";
 import { MutationType } from "../store/mutations";
@@ -12,23 +12,24 @@ export default defineComponent({
     const store = useStore();
     // computed values from getters that call the store
     const activeFraseArray = computed(() => store.getters.getActiveFraseArray);
-    const startCountDown = computed(() => {
-      const countdown = store.getters.getCountDown;
-      if (countdown === 0) {
-        console.log("should be focusing");
-        document.getElementById("working-input")?.focus();
-      }
-      return countdown;
-    });
+    const startCountDown = computed(() => store.getters.getCountDown);
 
     // changes the active frase in the store
     function changeFrase() {
       store.dispatch(ActionTypes.ChangeActiveFrase, undefined);
     }
+    function focusInput() {
+      window.setTimeout(() => document.getElementById("input")?.focus(), 0);
+    }
     function StartCountdDown() {
       store.commit(MutationType.SetCountDown, 3);
       document.getElementById("start-button")?.blur();
     }
+    watch(startCountDown, (currentvalue, oldvalue) => {
+      if (currentvalue === 0) {
+        focusInput();
+      }
+    });
     return { changeFrase, StartCountdDown, activeFraseArray, startCountDown };
   },
 
@@ -124,11 +125,10 @@ export default defineComponent({
     <input
       v-if="startCountDown === 0"
       type="text"
-      id="working-input"
+      id="input"
       class="typing-input"
       :class="{ 'wrong-input-entered': !checkIfCorrectValueSoFar() }"
       :value="inputMessage"
-      autofocus
       @input="setInputMessage($event)"
     />
     <input
