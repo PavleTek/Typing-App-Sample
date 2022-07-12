@@ -26,11 +26,14 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.SetRandomActiveFrase](state) {
     const frases = Object.values(state.frases);
-    const activeFrase = frases[Math.floor(Math.random() * frases.length)];
+    let activeFrase = state.activeFrase;
+    while (activeFrase === state.activeFrase) {
+      activeFrase = frases[Math.floor(Math.random() * frases.length)];
+    }
     state.activeFrase = activeFrase;
   },
   [MutationType.SetFraseSubSections](state) {
-    const activeFraseArray = state.activeFrase.split('');
+    const activeFraseArray = state.activeFrase.split("");
     state.fraseArrayAttempt = activeFraseArray;
-  }
+  },
 };
