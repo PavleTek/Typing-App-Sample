@@ -2,23 +2,34 @@
 import { computed, defineComponent } from "vue";
 import { store, useStore } from "../store";
 import { ActionTypes } from "../store/actions";
+import { MutationType } from "../store/mutations";
 import StartCounterVue from "./StartCounter.vue";
-import { MutationType } from "@/store/mutations";
 
 export default defineComponent({
-  components: {},
+  components: { StartCounterVue },
   setup() {
     // imports store
     const store = useStore();
     // computed values from getters that call the store
     const activeFraseArray = computed(() => store.getters.getActiveFraseArray);
-    const startCountDownOn = computed(() => store.getters.getCountDownOn);
+    const startCountDown = computed(() => {
+      const countdown = store.getters.getCountDown;
+      if (countdown === 0) {
+        console.log("should be focusing");
+        document.getElementById("working-input")?.focus();
+      }
+      return countdown;
+    });
 
     // changes the active frase in the store
     function changeFrase() {
       store.dispatch(ActionTypes.ChangeActiveFrase, undefined);
     }
-    return { changeFrase, activeFraseArray, startCountDownOn };
+    function StartCountdDown() {
+      store.commit(MutationType.SetCountDown, 3);
+      document.getElementById("start-button")?.blur();
+    }
+    return { changeFrase, StartCountdDown, activeFraseArray, startCountDown };
   },
 
   data() {
@@ -96,32 +107,52 @@ export default defineComponent({
 
 <template>
   <div class="main-container">
-    <div class="active-frase">
-      <span
-        v-for="(character, index) in activeFraseArray"
-        :key="index"
-        :class="createClassForSpan(character, index)"
-        >{{ character }}
-      </span>
+    <div class="frase-and-button-container">
+      <div class="active-frase">
+        <span
+          v-for="(character, index) in activeFraseArray"
+          :key="index"
+          :class="createClassForSpan(character, index)"
+          >{{ character }}
+        </span>
+      </div>
+      <button @click="StartCountdDown" class="start-button" id="start-button">
+        Start
+      </button>
     </div>
+    <StartCounterVue v-if="startCountDown > 0" />
     <input
+      v-if="startCountDown === 0"
+      type="text"
+      id="working-input"
+      class="typing-input"
+      :class="{ 'wrong-input-entered': !checkIfCorrectValueSoFar() }"
+      :value="inputMessage"
+      autofocus
+      @input="setInputMessage($event)"
+    />
+    <input
+      v-else
       type="text"
       class="typing-input"
       :class="{ 'wrong-input-entered': !checkIfCorrectValueSoFar() }"
       :value="inputMessage"
+      ref="myinput"
       @input="setInputMessage($event)"
+      disabled
     />
     <button @click="changeFraseButton" class="change-button">
       Change Frase
     </button>
   </div>
 </template>
-<style>
+
+<style scoped>
 .main-container {
   display: flex;
   flex-direction: column;
   background-color: rgb(48, 46, 45);
-  height: 40vh;
+  height: min-content;
   align-self: center;
   justify-self: center;
   border-radius: 5px;
@@ -133,6 +164,17 @@ export default defineComponent({
   font-weight: 500;
   border-radius: "100px";
   color: white;
+  margin-right: auto;
+}
+.frase-and-button-container {
+  display: flex;
+  width: 100%;
+}
+.start-button {
+  height: 3em;
+  align-self: center;
+  margin-right: 2%;
+  margin-left: auto;
 }
 .typing-input {
   margin: 2%;

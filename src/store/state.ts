@@ -3,7 +3,8 @@ export type State = {
   activeFrase: string;
   activeFraseId: string;
   activeFraseArray: string[];
-  countDownOn: boolean;
+  startCountDown: number;
+  typingOn: boolean;
 };
 
 export const state: State = {
@@ -11,5 +12,6 @@ export const state: State = {
   activeFrase: "",
   activeFraseId: "",
   activeFraseArray: [],
-  countDownOn: false,
+  startCountDown: -1,
+  typingOn: false,
 };

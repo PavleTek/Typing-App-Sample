@@ -5,7 +5,7 @@ export type Getters = {
   getFraseById(state: State): (id: string) => string;
   getActiveFrase(state: State): string;
   getActiveFraseArray(state: State): string[];
-  getCountDownOn(state: State): boolean;
+  getCountDown(state: State): number;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -18,7 +18,7 @@ export const getters: GetterTree<State, State> & Getters = {
   getActiveFraseArray(state) {
     return state.activeFraseArray;
   },
-  getCountDownOn(state) {
-    return state.countDownOn;
+  getCountDown(state) {
+    return state.startCountDown;
   },
 };
