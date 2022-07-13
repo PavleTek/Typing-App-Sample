@@ -9,6 +9,7 @@ export type Getters = {
   getCountDown(state: State): number;
   getTypingCountDown(state: State): number;
   getWpmSetting(state: State): boolean;
+  getCpmSetting(state: State): boolean;
   getCheatDeleteSetting(state: State): boolean;
 };
 
@@ -33,6 +34,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   getWpmSetting(state) {
     return state.wpmSpeedMeasure;
+  },
+  getCpmSetting(state) {
+    return state.cpmSpeedMeasure;
   },
   getCheatDeleteSetting(state) {
     return state.cheatDelete;

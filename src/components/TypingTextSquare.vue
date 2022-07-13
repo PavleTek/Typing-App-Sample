@@ -1,4 +1,5 @@
 <script lang="ts">
+import { thisTypeAnnotation } from "@babel/types";
 import { computed, defineComponent, watch } from "vue";
 import { store, useStore } from "../store";
 import { ActionTypes } from "../store/actions";
@@ -14,6 +15,9 @@ export default defineComponent({
     // computed values from getters that call the store
     const activeFraseArray = computed(() => store.getters.getActiveFraseArray);
     const startCountDown = computed(() => store.getters.getCountDown);
+    const cheatDeleteSetting = computed(
+      () => store.getters.getCheatDeleteSetting
+    );
 
     // changes the active frase in the store
     function changeFrase() {
@@ -43,6 +47,7 @@ export default defineComponent({
       setInitialCoolDown,
       setInitialTypingCountDown,
       activeFraseArray,
+      cheatDeleteSetting,
       startCountDown,
     };
   },
@@ -52,7 +57,8 @@ export default defineComponent({
     const inputMessage = "";
     const backgroundInputMessage = "";
     const alreadyCorrectlyTypedWord = "";
-    const correctlyTypedCharacters = 0;
+    const correctlyTypedCharactersAmount = 0;
+    const allCurrentlyCorrectlyTyped = "";
     const correctlyTypedWords = computed(() => {
       return alreadyCorrectlyTypedWord.split(" ").length;
     });
@@ -60,7 +66,8 @@ export default defineComponent({
       inputMessage,
       backgroundInputMessage,
       alreadyCorrectlyTypedWord,
-      correctlyTypedCharacters,
+      correctlyTypedCharactersAmount,
+      allCurrentlyCorrectlyTyped,
       correctlyTypedWords,
     };
   },
@@ -96,17 +103,37 @@ export default defineComponent({
           this.changeFraseButton();
           this.setInitialCoolDown();
         }
+      } else {
+        if (
+          this.cheatDeleteSetting &&
+          event.inputType === "deleteContentBackward" &&
+          !this.checkIfCorrectValueSoFar()
+        ) {
+          const lastCorrectlyTypedWordArray = this.allCurrentlyCorrectlyTyped.split(
+            " "
+          );
+          const lastWordCorrectlyTypedChars =
+            lastCorrectlyTypedWordArray[lastCorrectlyTypedWordArray.length - 1];
+          console.log(this.allCurrentlyCorrectlyTyped);
+          this.inputMessage = lastWordCorrectlyTypedChars;
+          this.backgroundInputMessage =
+            this.alreadyCorrectlyTypedWord + lastWordCorrectlyTypedChars;
+        }
       }
     },
     // checker to see if the frase has been correctly type from the begginin to the last typed value
     checkIfCorrectValueSoFar: function() {
+      let newCorrectlyTypedChars = "";
       for (let i = 0; i < this.backgroundInputMessage.length; i++) {
         if (this.backgroundInputMessage[i] !== this.activeFraseArray[i]) {
-          this.correctlyTypedCharacters = i;
+          this.correctlyTypedCharactersAmount = i;
           return false;
+        } else {
+          newCorrectlyTypedChars += this.backgroundInputMessage[i];
         }
       }
-      this.correctlyTypedCharacters = this.backgroundInputMessage.length;
+      this.correctlyTypedCharactersAmount = this.backgroundInputMessage.length;
+      this.allCurrentlyCorrectlyTyped = newCorrectlyTypedChars;
       return true;
     },
     // makes the html cleaner, creates the string class name for the main frase element
@@ -153,7 +180,7 @@ export default defineComponent({
       <TrafficLight v-if="startCountDown > 0" />
       <TypingSpeedDisplayVue
         v-if="startCountDown === 0"
-        :correctly-typed-characters="correctlyTypedCharacters"
+        :correctly-typed-characters="correctlyTypedCharactersAmount"
         :correctly-typed-words="alreadyCorrectlyTypedWord"
       />
     </div>

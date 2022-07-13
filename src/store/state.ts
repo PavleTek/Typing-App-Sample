@@ -12,6 +12,7 @@ export type State = {
   currentCPM: number;
   //  app settings
   wpmSpeedMeasure: boolean;
+  cpmSpeedMeasure: boolean;
   cheatDelete: boolean;
 };
 
@@ -29,5 +30,6 @@ export const state: State = {
   currentCPM: 0,
   //  app settings
   wpmSpeedMeasure: true,
+  cpmSpeedMeasure: false,
   cheatDelete: false,
 };
