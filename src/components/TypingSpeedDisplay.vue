@@ -12,7 +12,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    const wpmSpeedMeasure = computed(() => store.getters.getWpm);
+    const wpmSpeedMeasure = computed(() => store.getters.getWpmSetting);
     const totalCharacters = computed(
       () => store.getters.getActiveFraseArray.length
     );

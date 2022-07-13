@@ -8,27 +8,42 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    function toggleSpeedMeasure() {
-      store.commit(MutationType.ToggleSpeedMeasure, undefined);
-    }
     const buttonText = computed(() =>
-      store.getters.getWpm ? "Switch To CPM" : "Switch To WPM"
+      store.getters.getWpmSetting ? "Switch To CPM" : "Switch To WPM"
     );
-    return { toggleSpeedMeasure, buttonText };
+    const wpmSetting = computed({
+      get() {
+        return store.getters.getWpmSetting;
+      },
+      set(val: boolean) {
+        store.commit(MutationType.SetSpeedMeasure, val);
+      },
+    });
+    const cheatDeleteSetting = computed({
+      get() {
+        return store.getters.getCheatDeleteSetting;
+      },
+      set(val: boolean) {
+        store.commit(MutationType.SetCheatDelete, val);
+      },
+    });
+    return { buttonText, store, wpmSetting, cheatDeleteSetting };
   },
 });
 </script>
 
 <template>
-  <div class="counter-container">
-    <button @click="toggleSpeedMeasure" class="wpm-cpm-button">
-      {{ buttonText }}
-    </button>
+  <div class="options-container">
+    <input type="checkbox" v-model="wpmSetting" />
   </div>
 </template>
 <style scoped>
 .wpm-cpm-button {
   width: fit-content;
   margin: 2%;
+}
+.options-container {
+  background-color: rgb(48, 46, 45);
+  margin-top: 4em;
 }
 </style>

@@ -8,7 +8,8 @@ export type Getters = {
   getActiveFraseArray(state: State): string[];
   getCountDown(state: State): number;
   getTypingCountDown(state: State): number;
-  getWpm(state: State): boolean;
+  getWpmSetting(state: State): boolean;
+  getCheatDeleteSetting(state: State): boolean;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -30,7 +31,10 @@ export const getters: GetterTree<State, State> & Getters = {
   getTypingCountDown(state) {
     return state.typingCountDown;
   },
-  getWpm(state) {
-    return state.wpm;
+  getWpmSetting(state) {
+    return state.wpmSpeedMeasure;
+  },
+  getCheatDeleteSetting(state) {
+    return state.cheatDelete;
   },
 };

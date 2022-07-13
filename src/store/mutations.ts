@@ -9,7 +9,8 @@ export enum MutationType {
   SetFraseSubSections = "SET_FRASE_SUBSETCTIONS",
   SetCountDown = "SET_COUNT_DOWN",
   SetTypingCountDown = "SET_TYPING_COUNT_DOWN",
-  ToggleSpeedMeasure = "TOGGLE_SPEED_MEASURE",
+  SetSpeedMeasure = "TOGGLE_SPEED_MEASURE",
+  SetCheatDelete = "TOGGLE_SPEED_DELETE",
   SetCurrentWPM = "SET_CURRENT_WPM",
   SetCurrentCPM = "SET_CURRENT_CPM",
 }
@@ -20,7 +21,8 @@ export type Mutations = {
   [MutationType.SetFraseSubSections](state: State): void;
   [MutationType.SetCountDown](state: State, number: number): void;
   [MutationType.SetTypingCountDown](state: State, number: number): void;
-  [MutationType.ToggleSpeedMeasure](state: State): void;
+  [MutationType.SetSpeedMeasure](state: State, value: boolean): void;
+  [MutationType.SetCheatDelete](state: State, value: boolean): void;
   [MutationType.SetCurrentWPM](state: State, number: number): void;
   [MutationType.SetCurrentCPM](state: State, number: number): void;
 };
@@ -55,8 +57,11 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationType.SetTypingCountDown](state, number) {
     state.typingCountDown = number;
   },
-  [MutationType.ToggleSpeedMeasure](state) {
-    state.wpm = !state.wpm;
+  [MutationType.SetSpeedMeasure](state, value) {
+    state.wpmSpeedMeasure = value;
+  },
+  [MutationType.SetCheatDelete](state, value) {
+    state.cheatDelete = value;
   },
   [MutationType.SetCurrentWPM](state, number) {
     state.currentWPM = number;
