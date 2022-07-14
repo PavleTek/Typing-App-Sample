@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { State } from "./state";
+import { speedLog, State } from "./state";
 import { v4 as uuid } from "uuid";
 import { store } from ".";
 
@@ -14,6 +14,7 @@ export enum MutationType {
   SetCheatDelete = "TOGGLE_SPEED_DELETE",
   SetCurrentWPM = "SET_CURRENT_WPM",
   SetCurrentCPM = "SET_CURRENT_CPM",
+  SetSpeedRecordById = "SET_SPEED_RECORD_BY_ID",
 }
 
 export type Mutations = {
@@ -27,6 +28,10 @@ export type Mutations = {
   [MutationType.SetCheatDelete](state: State, value: boolean): void;
   [MutationType.SetCurrentWPM](state: State, number: number): void;
   [MutationType.SetCurrentCPM](state: State, number: number): void;
+  [MutationType.SetSpeedRecordById](
+    state: State,
+    value: { id: string; wpm: number; cpm: number }
+  ): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -73,5 +78,11 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.SetCurrentCPM](state, number) {
     state.currentCPM = number;
+  },
+  [MutationType.SetSpeedRecordById](state, value) {
+    const stateSpeedLogsCopy = state.speedLogs;
+    const activeFraseSpeedLog: speedLog = { wpm: value.wpm, cpm: value.cpm };
+    stateSpeedLogsCopy[value.id] = activeFraseSpeedLog;
+    state.speedLogs = stateSpeedLogsCopy;
   },
 };

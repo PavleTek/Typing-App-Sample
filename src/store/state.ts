@@ -1,11 +1,19 @@
+export type speedLog = {
+  wpm: number;
+  cpm: number;
+};
+
 export type State = {
   //  frase info
   frases: { [frasesId: string]: string };
+  speedLogs: { [fraseId: string]: speedLog };
   activeFrase: string;
   activeFraseId: string;
   activeFraseArray: string[];
   //  countdown that defines most functionality
   startCountDown: number;
+  //  typing on which also defines app functionality
+  typingOn: boolean;
   //  speed measurement
   typingCountDown: number;
   currentWPM: number;
@@ -19,11 +27,14 @@ export type State = {
 export const state: State = {
   //  frase info
   frases: {},
+  speedLogs: {},
   activeFrase: "",
   activeFraseId: "",
   activeFraseArray: [],
   //  countdown that defines most functionality
   startCountDown: -1,
+  //  typing on which also defines app functionality
+  typingOn: false,
   //  speed measurement
   typingCountDown: 0,
   currentWPM: 0,

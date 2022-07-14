@@ -6,9 +6,9 @@ import { ActionTypes } from "../store/actions";
 import { MutationType } from "../store/mutations";
 import TrafficLight from "./TrafficLight.vue";
 import TypingSpeedDisplayVue from "./TypingSpeedDisplay.vue";
-
+import TypingResumeVue from "./TypingResume.vue";
 export default defineComponent({
-  components: { TrafficLight, TypingSpeedDisplayVue },
+  components: { TrafficLight, TypingSpeedDisplayVue, TypingResumeVue },
   setup() {
     // imports store
     const store = useStore();
@@ -159,7 +159,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main-container" v-if="false">
     <div class="frase-and-button-container">
       <div class="active-frase">
         <span
@@ -207,6 +207,7 @@ export default defineComponent({
       Change Frase
     </button>
   </div>
+  <TypingResumeVue v-else />
 </template>
 
 <style scoped>

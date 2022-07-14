@@ -6,11 +6,14 @@ export type Getters = {
   getFraseDataById(state: State): (id: string) => string;
   getActiveFrase(state: State): string;
   getActiveFraseArray(state: State): string[];
+  // countDowns
   getCountDown(state: State): number;
   getTypingCountDown(state: State): number;
+  // settings
   getWpmSetting(state: State): boolean;
   getCpmSetting(state: State): boolean;
   getCheatDeleteSetting(state: State): boolean;
+  // speedData
 };
 
 export const getters: GetterTree<State, State> & Getters = {
