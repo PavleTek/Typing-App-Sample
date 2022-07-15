@@ -1,12 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, watch } from "vue";
+import { computed, defineComponent, watch } from "vue";
 import { useStore } from "../store";
 import { ActionTypes } from "../store/actions";
 import { MutationType } from "../store/mutations";
 import TrafficLight from "./TrafficLight.vue";
 import TypingSpeedDisplayVue from "./TypingSpeedDisplay.vue";
 import TypingResumeVue from "./TypingResume.vue";
-import { getters } from "@/store/getters";
 export default defineComponent({
   components: { TrafficLight, TypingSpeedDisplayVue, TypingResumeVue },
   setup() {
@@ -33,10 +32,7 @@ export default defineComponent({
     function setInitialCoolDown() {
       store.commit(MutationType.SetCountDown, -1);
     }
-    function setInitialTypingCountDown() {
-      store.commit(MutationType.SetTypingCountDown, 0);
-    }
-    watch(startCountDown, (currentvalue, oldvalue) => {
+    watch(startCountDown, (currentvalue) => {
       if (currentvalue === 0) {
         focusInput();
       }
@@ -45,7 +41,6 @@ export default defineComponent({
       changeFrase,
       StartCountdDown,
       setInitialCoolDown,
-      setInitialTypingCountDown,
       activeFraseArray,
       resumeOn,
       cheatDeleteSetting,
@@ -55,7 +50,7 @@ export default defineComponent({
   },
 
   data() {
-    //  input variables need for all the class and styling logic, color change on errros, only showing the last word on input, etc...
+    //  input variables need for all the class and styling logic, color change on errros, only showing the last word on input, measuring typingSpeed, etc...
     const inputMessage = "";
     const backgroundInputMessage = "";
     const alreadyCorrectlyTypedWord = "";
@@ -81,19 +76,22 @@ export default defineComponent({
       this.backgroundInputMessage = "";
       this.alreadyCorrectlyTypedWord = "";
     },
+
     resetCorrectlyTypedData: function() {
       this.correctlyTypedCharactersAmount = 0;
       this.allCurrentlyCorrectlyTyped = "";
       this.alreadyCorrectlyTypedWord = "";
     },
+
     // changes the frase, and sets input values to base state
     changeFraseButton: function() {
       this.resetInputMessage();
       this.changeFrase();
       this.setInitialCoolDown();
-      this.setInitialTypingCountDown();
     },
+
     // used instead of v-model in order to be able to only display the last word on input
+    // eslint-disable-next-line
     setInputMessage: function(event: any) {
       const inputValue = event.target.value;
       this.inputMessage = inputValue;
@@ -127,6 +125,7 @@ export default defineComponent({
         }
       }
     },
+
     // checker to see if the frase has been correctly type from the begginin to the last typed value
     checkIfCorrectValueSoFar: function() {
       let newCorrectlyTypedChars = "";
@@ -142,6 +141,7 @@ export default defineComponent({
       this.allCurrentlyCorrectlyTyped = newCorrectlyTypedChars;
       return true;
     },
+
     // makes the html cleaner, creates the string class name for the main frase element
     createClassForSpan: function(character: string, index: number): string {
       let classString = "";
@@ -155,7 +155,11 @@ export default defineComponent({
       }
       if (this.backgroundInputMessage.length === index && index !== 0) {
         classString += "current-letter-being-typed";
-      } else if (this.backgroundInputMessage.length === 0 && index === 0) {
+      } else if (
+        this.backgroundInputMessage.length === 0 &&
+        index === 0 &&
+        this.startCountDown === 0
+      ) {
         classString += "first-letter-being-typed";
       }
       return classString;
@@ -244,6 +248,14 @@ export default defineComponent({
   margin-right: 2%;
   margin-left: auto;
 }
+.change-button {
+  margin: 2%;
+  align-content: flex-start;
+  background-color: white;
+  align-self: flex-start;
+}
+
+/* making the use input look responsive */
 .typing-input {
   margin: 2%;
   padding: 1%;
@@ -253,12 +265,6 @@ export default defineComponent({
 }
 .wrong-input-entered {
   background-color: rgb(218, 116, 116) !important;
-}
-.change-button {
-  margin: 2%;
-  align-content: flex-start;
-  background-color: white;
-  align-self: flex-start;
 }
 .correct-input-letter {
   color: rgb(103, 221, 103);

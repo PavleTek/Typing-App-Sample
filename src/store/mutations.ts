@@ -1,7 +1,6 @@
 import { MutationTree } from "vuex";
 import { speedLog, State } from "./state";
 import { v4 as uuid } from "uuid";
-import { store } from ".";
 
 export enum MutationType {
   SetFrases = "SET_FRASES",

@@ -31,7 +31,6 @@ export const getters: GetterTree<State, State> & Getters = {
     const stateSpeedLogsCopy: { [fraseId: string]: speedLog } = state.speedLogs;
     let speedSum = 0;
     Object.keys(stateSpeedLogsCopy).forEach((key: string) => {
-      const speedLog = stateSpeedLogsCopy[key];
       speedSum += stateSpeedLogsCopy[key].wpm;
     });
     return speedSum / Object.values(stateSpeedLogsCopy).length;
@@ -40,7 +39,6 @@ export const getters: GetterTree<State, State> & Getters = {
     const stateSpeedLogsCopy: { [fraseId: string]: speedLog } = state.speedLogs;
     let speedSum = 0;
     Object.keys(stateSpeedLogsCopy).forEach((key: string) => {
-      const speedLog = stateSpeedLogsCopy[key];
       speedSum += stateSpeedLogsCopy[key].cpm;
     });
     return speedSum / Object.values(stateSpeedLogsCopy).length;

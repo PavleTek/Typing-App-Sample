@@ -1,8 +1,7 @@
 <script lang="ts">
 import { MutationType } from "@/store/mutations";
-import { tsConstructSignatureDeclaration } from "@babel/types";
-import { computed, defineComponent, onMounted } from "vue";
-import { store, useStore } from "../store";
+import { computed, defineComponent } from "vue";
+import { useStore } from "../store";
 
 export default defineComponent({
   components: {},
