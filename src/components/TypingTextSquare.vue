@@ -1,12 +1,12 @@
 <script lang="ts">
-import { thisTypeAnnotation } from "@babel/types";
-import { computed, defineComponent, watch } from "vue";
-import { store, useStore } from "../store";
+import { computed, defineComponent, onMounted, watch } from "vue";
+import { useStore } from "../store";
 import { ActionTypes } from "../store/actions";
 import { MutationType } from "../store/mutations";
 import TrafficLight from "./TrafficLight.vue";
 import TypingSpeedDisplayVue from "./TypingSpeedDisplay.vue";
 import TypingResumeVue from "./TypingResume.vue";
+import { getters } from "@/store/getters";
 export default defineComponent({
   components: { TrafficLight, TypingSpeedDisplayVue, TypingResumeVue },
   setup() {
@@ -15,13 +15,13 @@ export default defineComponent({
     // computed values from getters that call the store
     const activeFraseArray = computed(() => store.getters.getActiveFraseArray);
     const startCountDown = computed(() => store.getters.getCountDown);
+    const resumeOn = computed(() => store.getters.getResumeOn);
     const cheatDeleteSetting = computed(
       () => store.getters.getCheatDeleteSetting
     );
-
     // changes the active frase in the store
     function changeFrase() {
-      store.dispatch(ActionTypes.ChangeActiveFrase, undefined);
+      store.commit(MutationType.SetRandomActiveFrase, undefined);
     }
     function focusInput() {
       window.setTimeout(() => document.getElementById("input")?.focus(), 0);
@@ -47,8 +47,10 @@ export default defineComponent({
       setInitialCoolDown,
       setInitialTypingCountDown,
       activeFraseArray,
+      resumeOn,
       cheatDeleteSetting,
       startCountDown,
+      store,
     };
   },
 
@@ -100,8 +102,7 @@ export default defineComponent({
         if (
           this.backgroundInputMessage.length === this.activeFraseArray.length
         ) {
-          this.changeFraseButton();
-          this.setInitialCoolDown();
+          this.store.dispatch(ActionTypes.FinishTyping);
         }
       } else {
         if (
@@ -159,7 +160,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="main-container" v-if="false">
+  <div class="main-container" v-if="!resumeOn">
     <div class="frase-and-button-container">
       <div class="active-frase">
         <span

@@ -1,6 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
-import TaskList from "./components/TaskList.vue";
+import { defineComponent, onMounted } from "vue";
 import { useStore } from "./store";
 import TypingTextSquareVue from "./components/TypingTextSquare.vue";
 import { ActionTypes } from "./store/actions";
@@ -13,7 +12,6 @@ export default defineComponent({
     onMounted(() => {
       store.dispatch(ActionTypes.SetInitialFrases);
     });
-    return {};
   },
 });
 </script>
@@ -23,7 +21,7 @@ export default defineComponent({
     <h1
       class="is-size-2 has-text-centered p-1 has-text-weight-bold has-text-info"
     >
-      Typing App Sample
+      PavleTek Typing App
     </h1>
     <TypingTextSquareVue />
     <OptionsButtonsVue />

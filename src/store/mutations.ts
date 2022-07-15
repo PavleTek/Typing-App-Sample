@@ -6,11 +6,12 @@ import { store } from ".";
 export enum MutationType {
   SetFrases = "SET_FRASES",
   SetRandomActiveFrase = "SET_RANDOM_ACTIVE_FRASE",
-  SetFraseSubSections = "SET_FRASE_SUBSETCTIONS",
   SetCountDown = "SET_COUNT_DOWN",
   SetTypingCountDown = "SET_TYPING_COUNT_DOWN",
+  SetResumeOn = "SET_RESUME_ON",
   SetWpmSpeedMeasure = "SET_WPM_SPEED_MEASURE",
   SetCpmSpeedMeasure = "SET_CPM_SPEED_MEASURE",
+  UpdateAverageSpeed = "UPDATE_AVERAGE_SPEED",
   SetCheatDelete = "TOGGLE_SPEED_DELETE",
   SetCurrentWPM = "SET_CURRENT_WPM",
   SetCurrentCPM = "SET_CURRENT_CPM",
@@ -20,12 +21,13 @@ export enum MutationType {
 export type Mutations = {
   [MutationType.SetFrases](state: State, frases: string[]): void;
   [MutationType.SetRandomActiveFrase](state: State): void;
-  [MutationType.SetFraseSubSections](state: State): void;
+  [MutationType.UpdateAverageSpeed](state: State): void;
   [MutationType.SetCountDown](state: State, number: number): void;
   [MutationType.SetTypingCountDown](state: State, number: number): void;
   [MutationType.SetWpmSpeedMeasure](state: State, value: boolean): void;
   [MutationType.SetCpmSpeedMeasure](state: State, value: boolean): void;
   [MutationType.SetCheatDelete](state: State, value: boolean): void;
+  [MutationType.SetResumeOn](state: State, value: boolean): void;
   [MutationType.SetCurrentWPM](state: State, number: number): void;
   [MutationType.SetCurrentCPM](state: State, number: number): void;
   [MutationType.SetSpeedRecordById](
@@ -53,10 +55,7 @@ export const mutations: MutationTree<State> & Mutations = {
     }
     state.activeFraseId = activeFraseId;
     state.activeFrase = activeFrase;
-  },
-  [MutationType.SetFraseSubSections](state) {
-    const activeFraseArray = state.activeFrase.split("");
-    state.activeFraseArray = activeFraseArray;
+    state.activeFraseArray = activeFrase.split("");
   },
   [MutationType.SetCountDown](state, number) {
     state.startCountDown = number;
@@ -73,8 +72,23 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationType.SetCheatDelete](state, value) {
     state.cheatDelete = value;
   },
+  [MutationType.SetResumeOn](state, value) {
+    state.resumeOn = value;
+  },
   [MutationType.SetCurrentWPM](state, number) {
     state.currentWPM = number;
+  },
+  [MutationType.SetCurrentCPM](state, number) {
+    state.currentCPM = number;
+  },
+  [MutationType.UpdateAverageSpeed](state) {
+    const typingAttempts = Object.keys(state.speedLogs).length;
+    const currentCPMAverage =
+      (state.averageCPM + state.currentCPM) / typingAttempts;
+    const currentWPMAverage =
+      (state.averageWPM + state.currentWPM) / typingAttempts;
+    state.averageWPM = currentWPMAverage;
+    state.averageCPM = currentCPMAverage;
   },
   [MutationType.SetCurrentCPM](state, number) {
     state.currentCPM = number;

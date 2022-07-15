@@ -12,12 +12,14 @@ export type State = {
   activeFraseArray: string[];
   //  countdown that defines most functionality
   startCountDown: number;
-  //  typing on which also defines app functionality
-  typingOn: boolean;
+  //  Resume which also defines app functionality
+  resumeOn: boolean;
   //  speed measurement
   typingCountDown: number;
   currentWPM: number;
   currentCPM: number;
+  averageWPM: number;
+  averageCPM: number;
   //  app settings
   wpmSpeedMeasure: boolean;
   cpmSpeedMeasure: boolean;
@@ -34,11 +36,13 @@ export const state: State = {
   //  countdown that defines most functionality
   startCountDown: -1,
   //  typing on which also defines app functionality
-  typingOn: false,
+  resumeOn: false,
   //  speed measurement
   typingCountDown: 0,
   currentWPM: 0,
   currentCPM: 0,
+  averageWPM: 0,
+  averageCPM: 0,
   //  app settings
   wpmSpeedMeasure: true,
   cpmSpeedMeasure: false,

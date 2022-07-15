@@ -28,15 +28,19 @@ export default defineComponent({
     const wpm = computed(() => {
       const minutesPassed = (90 - Number(remainingTypingTime.value)) / 60;
       const typedWords = Number(correctlyTypedWordsAmount.value);
-      if (typedWords === 0) {
-        return 0;
-      } else {
-        return ((typedWords - 1) / minutesPassed).toFixed();
+      let wpmSpeed = 0;
+      if (typedWords !== 0) {
+        wpmSpeed = Number(((typedWords - 1) / minutesPassed).toFixed());
+        store.commit(MutationType.SetCurrentWPM, wpmSpeed);
       }
     });
     const cpm = computed(() => {
       const minutesPassed = (90 - Number(remainingTypingTime.value)) / 60;
-      return (props.correctlyTypedCharacters / minutesPassed).toFixed();
+      const cpmSpeed = Number(
+        (props.correctlyTypedCharacters / minutesPassed).toFixed()
+      );
+      store.commit(MutationType.SetCurrentCPM, cpmSpeed);
+      return cpmSpeed;
     });
     function countDownTimer() {
       if (Number(remainingTypingTime.value) > 0) {
