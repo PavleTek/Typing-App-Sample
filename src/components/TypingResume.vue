@@ -10,6 +10,7 @@ import { store, useStore } from "../store";
 
 export default defineComponent({
   components: {},
+  props: {},
   setup() {
     const store = useStore();
     function startNewFrase() {
@@ -37,17 +38,19 @@ export default defineComponent({
 
 <template>
   <div class="resume-container">
-    <div>{{ typedFrase }}</div>
-    <div v-if="wpmSpeedMeasure">
+    <div class="typed-frase two-padding-margin">{{ typedFrase }}</div>
+    <div v-if="wpmSpeedMeasure" class="two-padding-margin">
       <span>you typed at {{ currentSpeedLog.wpm }} Word per minute</span>
       <span>your average speed this session is {{ averageWpm }}</span>
     </div>
-    <div v-else>
+    <div v-else class="two-padding-margin">
       <span>you typed at {{ currentSpeedLog.cpm }} Word per minute</span>
       <span>your average speed this session is {{ averageCpm }}</span>
     </div>
-    <div>your average speed this session</div>
-    <div>start new frase</div>
+    <div class="two-padding-margin">your average speed this session</div>
+    <button class="two-padding-margin" @click="startNewFrase">
+      start new frase
+    </button>
   </div>
 </template>
 <style scoped>
@@ -59,5 +62,12 @@ export default defineComponent({
   align-self: center;
   justify-self: center;
   border-radius: 5px;
+  color: white;
+  font-size: large;
+  font-weight: 500;
+}
+.two-padding-margin {
+  padding: 1%;
+  margin: 1%;
 }
 </style>

@@ -13,12 +13,6 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const wpmSpeedMeasure = computed(() => store.getters.getWpmSetting);
-    const totalCharacters = computed(
-      () => store.getters.getActiveFraseArray.length
-    );
-    const totalWords = computed(
-      () => store.getters.getActiveFrase.split(" ").length
-    );
     const correctlyTypedWordsAmount = computed(
       () => props.correctlyTypedWords.split(" ").length - 1
     );
@@ -59,8 +53,6 @@ export default defineComponent({
     });
     return {
       wpmSpeedMeasure,
-      totalCharacters,
-      totalWords,
       correctlyTypedWordsAmount,
       remainingTypingTime,
       wpm,
