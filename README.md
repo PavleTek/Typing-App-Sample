@@ -1,18 +1,10 @@
-# Vue 3 Task Manager
-
-<h2 align="center">
-  <img src="./screenshot.png" alt="vue3-task-manager" width="600px" />
-  <br>
-</h2>
-
-
 ## Quick Start
 
-```bash
-# Install dependencies
-cd vue3-task-manager
-npm install
-
-# Run
+npm start
 npm run serve
-```
+
+This project has was made using this vuex4 and typeScript template from this gitHub link https://github.com/armanabkar/vue3-task-manager
+
+it's not as pretty as I would liked it to be because I wanted to use vuetify, but it doesn't support vue3 without having to use vite, so I've decided to do it simple.
+
+this app shows most of vue3 propertys and tools, so I hope it displays enough knowledge and maybe if someone random seys it, they could use it to learn from it.
