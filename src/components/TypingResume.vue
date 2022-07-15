@@ -10,7 +10,6 @@ import { store, useStore } from "../store";
 
 export default defineComponent({
   components: {},
-  props: {},
   setup() {
     const store = useStore();
     function startNewFrase() {
@@ -39,16 +38,27 @@ export default defineComponent({
 <template>
   <div class="resume-container">
     <div class="typed-frase two-padding-margin">{{ typedFrase }}</div>
-    <div v-if="wpmSpeedMeasure" class="two-padding-margin">
-      <span>you typed at {{ currentSpeedLog.wpm }} Word per minute</span>
+    <div v-if="wpmSpeedMeasure" class="two-padding-margin double-span">
+      <span class="first-span"
+        >you typed at {{ currentSpeedLog.wpm }} Word per minute</span
+      >
       <span>your average speed this session is {{ averageWpm }}</span>
     </div>
-    <div v-else class="two-padding-margin">
-      <span>you typed at {{ currentSpeedLog.cpm }} Word per minute</span>
+    <div v-else class="two-padding-margin double-span">
+      <span class="first-span"
+        >you typed at {{ currentSpeedLog.cpm }} Word per minute,</span
+      >
       <span>your average speed this session is {{ averageCpm }}</span>
     </div>
-    <div class="two-padding-margin">your average speed this session</div>
-    <button class="two-padding-margin" @click="startNewFrase">
+    <button
+      class="two-padding-margin"
+      @click="
+        () => {
+          startNewFrase();
+          $emit('reset-input-values');
+        }
+      "
+    >
       start new frase
     </button>
   </div>
@@ -69,5 +79,12 @@ export default defineComponent({
 .two-padding-margin {
   padding: 1%;
   margin: 1%;
+}
+.first-span {
+  padding-right: 1em;
+}
+.double-span {
+  display: flex;
+  flex-direction: column;
 }
 </style>

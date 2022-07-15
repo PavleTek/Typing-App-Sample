@@ -1,4 +1,5 @@
 <script lang="ts">
+import { ActionTypes } from "@/store/actions";
 import { MutationType } from "@/store/mutations";
 import { tsConstructSignatureDeclaration } from "@babel/types";
 import { computed, defineComponent, onMounted } from "vue";
@@ -22,17 +23,20 @@ export default defineComponent({
     const wpm = computed(() => {
       const minutesPassed = (90 - Number(remainingTypingTime.value)) / 60;
       const typedWords = Number(correctlyTypedWordsAmount.value);
+      console.log(typedWords);
       let wpmSpeed = 0;
       if (typedWords !== 0) {
-        wpmSpeed = Number(((typedWords - 1) / minutesPassed).toFixed());
+        wpmSpeed = Math.round((typedWords - 1) / minutesPassed);
         store.commit(MutationType.SetCurrentWPM, wpmSpeed);
       }
+      return wpmSpeed;
     });
     const cpm = computed(() => {
       const minutesPassed = (90 - Number(remainingTypingTime.value)) / 60;
-      const cpmSpeed = Number(
-        (props.correctlyTypedCharacters / minutesPassed).toFixed()
+      const cpmSpeed = Math.round(
+        props.correctlyTypedCharacters / minutesPassed
       );
+
       store.commit(MutationType.SetCurrentCPM, cpmSpeed);
       return cpmSpeed;
     });

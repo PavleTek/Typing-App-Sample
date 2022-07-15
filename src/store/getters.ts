@@ -28,10 +28,22 @@ export const getters: GetterTree<State, State> & Getters = {
     return state.speedLogs[id];
   },
   getAverageSpeedWpm(state) {
-    return state.averageWPM;
+    const stateSpeedLogsCopy: { [fraseId: string]: speedLog } = state.speedLogs;
+    let speedSum = 0;
+    Object.keys(stateSpeedLogsCopy).forEach((key: string) => {
+      const speedLog = stateSpeedLogsCopy[key];
+      speedSum += stateSpeedLogsCopy[key].wpm;
+    });
+    return speedSum / Object.values(stateSpeedLogsCopy).length;
   },
   getAverageSpeedCpm(state) {
-    return state.averageCPM;
+    const stateSpeedLogsCopy: { [fraseId: string]: speedLog } = state.speedLogs;
+    let speedSum = 0;
+    Object.keys(stateSpeedLogsCopy).forEach((key: string) => {
+      const speedLog = stateSpeedLogsCopy[key];
+      speedSum += stateSpeedLogsCopy[key].cpm;
+    });
+    return speedSum / Object.values(stateSpeedLogsCopy).length;
   },
   getActiveFrase(state) {
     return state.activeFrase;

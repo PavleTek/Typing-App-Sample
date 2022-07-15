@@ -11,7 +11,6 @@ export enum MutationType {
   SetResumeOn = "SET_RESUME_ON",
   SetWpmSpeedMeasure = "SET_WPM_SPEED_MEASURE",
   SetCpmSpeedMeasure = "SET_CPM_SPEED_MEASURE",
-  UpdateAverageSpeed = "UPDATE_AVERAGE_SPEED",
   SetCheatDelete = "TOGGLE_SPEED_DELETE",
   SetCurrentWPM = "SET_CURRENT_WPM",
   SetCurrentCPM = "SET_CURRENT_CPM",
@@ -21,7 +20,6 @@ export enum MutationType {
 export type Mutations = {
   [MutationType.SetFrases](state: State, frases: string[]): void;
   [MutationType.SetRandomActiveFrase](state: State): void;
-  [MutationType.UpdateAverageSpeed](state: State): void;
   [MutationType.SetCountDown](state: State, number: number): void;
   [MutationType.SetTypingCountDown](state: State, number: number): void;
   [MutationType.SetWpmSpeedMeasure](state: State, value: boolean): void;
@@ -80,15 +78,6 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.SetCurrentCPM](state, number) {
     state.currentCPM = number;
-  },
-  [MutationType.UpdateAverageSpeed](state) {
-    const typingAttempts = Object.keys(state.speedLogs).length;
-    const currentCPMAverage =
-      (state.averageCPM + state.currentCPM) / typingAttempts;
-    const currentWPMAverage =
-      (state.averageWPM + state.currentWPM) / typingAttempts;
-    state.averageWPM = currentWPMAverage;
-    state.averageCPM = currentCPMAverage;
   },
   [MutationType.SetCurrentCPM](state, number) {
     state.currentCPM = number;

@@ -81,6 +81,11 @@ export default defineComponent({
       this.backgroundInputMessage = "";
       this.alreadyCorrectlyTypedWord = "";
     },
+    resetCorrectlyTypedData: function() {
+      this.correctlyTypedCharactersAmount = 0;
+      this.allCurrentlyCorrectlyTyped = "";
+      this.alreadyCorrectlyTypedWord = "";
+    },
     // changes the frase, and sets input values to base state
     changeFraseButton: function() {
       this.resetInputMessage();
@@ -194,21 +199,20 @@ export default defineComponent({
       :value="inputMessage"
       @input="setInputMessage($event)"
     />
-    <input
-      v-else
-      type="text"
-      class="typing-input"
-      :class="{ 'wrong-input-entered': !checkIfCorrectValueSoFar() }"
-      :value="inputMessage"
-      ref="myinput"
-      @input="setInputMessage($event)"
-      disabled
-    />
+    <input v-else type="text" class="typing-input" disabled />
     <button @click="changeFraseButton" class="change-button">
       Change Frase
     </button>
   </div>
-  <TypingResumeVue v-else />
+  <TypingResumeVue
+    v-else
+    @reset-input-values="
+      () => {
+        resetInputMessage();
+        resetCorrectlyTypedData();
+      }
+    "
+  />
 </template>
 
 <style scoped>
